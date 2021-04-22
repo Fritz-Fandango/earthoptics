@@ -1,79 +1,72 @@
-import * as React from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useState
+} from 'react';
+import mapboxgl from 'mapbox-gl';
+
+// Material UI styles
 import { useTheme } from '@material-ui/core/styles';
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Label,
-    ResponsiveContainer
-} from 'recharts';
-// import Title from './Title';
-import Title from '../Map/Title';
 
-// Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
-}
+// Material UI components
+import Typography from '@material-ui/core/Typography';
 
-const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
-  createData('24:00', undefined),
-];
+// Components
+import Title from '../Title/Title';
 
-export default function Chart() {
+const Map = (props) => {
   const theme = useTheme();
+
+  // mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
+  mapboxgl.accessToken = 'pk.eyJ1Ijoia3prdiIsImEiOiI5QTV5TzdVIn0.upR1M0jGXbQPvkte-SaQ1w';
+
+  const mockGeoJSON = 'https://gxlu1hg02b.execute-api.us-east-1.amazonaws.com/default/mockGeoJSONAPI';
+
+  const tilesURL = 'https://tiles.earthoptics.com/ndvi/{z}/{x}/{y}.png';
+
+  const mapContainerRef = useRef(null);
+
+  const [long, setLong] = useState(-92.65880554936408);
+
+  const [lati, setLati] = useState(42.704868874031554);
+
+  const [zoom, setZoom] = useState(13);
+
+  // Initialize map when component mounts
+  useEffect(() => {
+      const map = new mapboxgl.Map({
+          container: mapContainerRef.current,
+          style: 'mapbox://styles/mapbox/streets-v11',
+          center: [long, lati],
+          zoom: zoom
+      });
+
+      // Add navigation control (the +/- zoom buttons)
+      map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      map.on('move', () => {
+          setLati(map.getCenter().lati);
+          setLong(map.getCenter().long);
+          setZoom(map.getZoom());
+      });
+
+      // Clean up on map unmount
+      return () => map.remove();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <React.Fragment>
       <Title>Today</Title>
-      <ResponsiveContainer>
-        <LineChart
-          data={data}
-          margin={{
-            top: 16,
-            right: 16,
-            bottom: 0,
-            left: 24,
-          }}
-        >
-          <XAxis
-            dataKey="time"
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          />
-          <YAxis
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: 'middle',
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              Sales ($)
-            </Label>
-          </YAxis>
-          <Line
-            isAnimationActive={false}
-            type="monotone"
-            dataKey="amount"
-            stroke={theme.palette.primary.main}
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <div>
+        <div className='sidebarStyle'>
+          <div>
+            <Typography>Longitude: {long} | Latitude: {lati} | Zoom: {zoom}</Typography>
+          </div>
+        </div>
+        <div className='map-container' ref={mapContainerRef} />
+      </div>
     </React.Fragment>
   );
 }
+
+export default Map;
