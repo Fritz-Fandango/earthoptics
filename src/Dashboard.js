@@ -5,12 +5,16 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+// Material UI colors
+import purple from '@material-ui/core/colors/purple';
+
 // Material UI components
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 // Components
+// import useStyles from './styles/useStyles';
 import Chart from './components/Chart/Chart';
 import FooterDashboard from './components/FooterDashboard/FooterDashboard';
 import Deposits from './components/Deposits/Deposits';
@@ -104,10 +108,26 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  mapPaper: {
+    height: '60vh',
+  },
+  mapboxContainer: {
+    height: '80%',
+  },
+  purpleNurple: {
+    color: theme.palette.getContrastText(purple[500]),
+    '&:hover': {
+      backgroundColor: purple[700],
+    },
+  }
 }));
 
-export default function Dashboard() {
+const Dashboard = () => {
   const classes = useStyles();
+
+  const mapPaper = clsx(classes.paper, classes.mapPaper);
+
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const [open, setOpen] = React.useState(true);
 
@@ -119,7 +139,6 @@ export default function Dashboard() {
     setOpen(false);
   };
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -132,8 +151,8 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Paper className={fixedHeightPaper}>
-                <Map />
+              <Paper className={mapPaper}>
+                <Map classes={classes} />
               </Paper>
             </Grid>
             {/* Chart */}
@@ -161,3 +180,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;
