@@ -1,5 +1,9 @@
 import * as React from 'react';
+
+// Material UI styles
 import { useTheme } from '@material-ui/core/styles';
+
+// recharts components
 import {
     LineChart,
     Line,
@@ -9,6 +13,7 @@ import {
     ResponsiveContainer
 } from 'recharts';
 
+// components
 import Title from '../Title/Title';
 
 // Generate Sales Data

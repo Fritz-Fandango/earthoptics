@@ -1,72 +1,94 @@
 import React, {
-  useRef,
-  useEffect,
-  useState
+    useEffect,
+    useState
 } from 'react';
-import mapboxgl from 'mapbox-gl';
+import ReactMapGL, {
+    Marker,
+    Popup
+} from 'react-map-gl';
 
-// Material UI styles
-import { useTheme } from '@material-ui/core/styles';
+// Mock data layer
+import * as multipoint from '../../data/mockGeo.json';
 
-// Material UI components
-import Typography from '@material-ui/core/Typography';
+// Material UI component
+import IconButton from '@material-ui/core/IconButton';
 
-// Components
-import Title from '../Title/Title';
+// Material UI icon
+import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
 
 const Map = (props) => {
-  const theme = useTheme();
+    const { classes } = props;
 
-  // mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
-  mapboxgl.accessToken = 'pk.eyJ1Ijoia3prdiIsImEiOiI5QTV5TzdVIn0.upR1M0jGXbQPvkte-SaQ1w';
+    // Set viewport state
+    const [viewport, setViewport] = useState({
+        latitude: 42.704868874031554,
+        longitude: -92.65880554936408,
+        height: '100vh',
+        width: '67vw',
+        zoom: 13
+    });
 
-  const mockGeoJSON = 'https://gxlu1hg02b.execute-api.us-east-1.amazonaws.com/default/mockGeoJSONAPI';
+    // Set point selection state
+    const [selectedPoint, setSelectedPoint] = useState(null);
 
-  const tilesURL = 'https://tiles.earthoptics.com/ndvi/{z}/{x}/{y}.png';
+    // Data layer didn't include unique identifiers
+    let markerUniqId = require('uniqid')
 
-  const mapContainerRef = useRef(null);
+    useEffect(() => {
+        const keyboardListener = (evt) => {
+            if(evt.key === "Escape") {
+                setSelectedPoint(null);
+            }
+        };
 
-  const [long, setLong] = useState(-92.65880554936408);
+        window.addEventListener('keydown', keyboardListener);
 
-  const [lati, setLati] = useState(42.704868874031554);
+        return () => {
+            window.removeEventListener('keydown', keyboardListener);
+        };
+    }, []);
 
-  const [zoom, setZoom] = useState(13);
-
-  // Initialize map when component mounts
-  useEffect(() => {
-      const map = new mapboxgl.Map({
-          container: mapContainerRef.current,
-          style: 'mapbox://styles/mapbox/streets-v11',
-          center: [long, lati],
-          zoom: zoom
-      });
-
-      // Add navigation control (the +/- zoom buttons)
-      map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-      map.on('move', () => {
-          setLati(map.getCenter().lati);
-          setLong(map.getCenter().long);
-          setZoom(map.getZoom());
-      });
-
-      // Clean up on map unmount
-      return () => map.remove();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <React.Fragment>
-      <Title>Today</Title>
-      <div>
-        <div className='sidebarStyle'>
-          <div>
-            <Typography>Longitude: {long} | Latitude: {lati} | Zoom: {zoom}</Typography>
-          </div>
-        </div>
-        <div className='map-container' ref={mapContainerRef} />
-      </div>
-    </React.Fragment>
-  );
+    return (
+        <ReactMapGL
+            // Note: Be sure to add your local env var for the token.
+            mapboxApiAccessToken={process.env.REACT_APP_SATELLITE_DATA_TOKEN}
+            {...viewport}
+            mapStyle='mapbox://styles/mapbox/satellite-v9'
+            onViewportChange={viewport => { setViewport(viewport) }}
+        >
+            {multipoint.coordinates.map((coord) => (
+                <Marker
+                    key={markerUniqId('coord-')}
+                    latitude={coord[0]}
+                    longitude={coord[1]}
+                >
+                <IconButton
+                    aria-label="data point"
+                    className={classes.purpleNurple}
+                    size="small"
+                    onClick={evt => {
+                        evt.preventDefault();
+                        setSelectedPoint(coord);
+                    }}
+                >
+                    <RoomTwoToneIcon />
+                </IconButton>
+                </Marker>
+            ))}
+            {selectedPoint ? (
+                <Popup
+                    latitude={selectedPoint[0]}
+                    longitude={selectedPoint[1]}
+                    onClose={() => setSelectedPoint(null)}
+                >
+                    <div>
+                        <pre>{`lat: ${selectedPoint[0]}`}</pre>
+                        <pre>{`log: ${selectedPoint[1]}`}</pre>
+                    </div>
+                </Popup>
+            ) : null }
+        </ReactMapGL>
+    )
 }
 
 export default Map;

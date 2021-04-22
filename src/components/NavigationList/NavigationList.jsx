@@ -13,7 +13,7 @@ import LayersIcon from '@material-ui/icons/Layers';
 import MapIcon from '@material-ui/icons/Map';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
-export default function NavigationList(props) {
+const NavigationList = (props) => {
     const { classes } = props;
 
     return (
@@ -53,3 +53,5 @@ export default function NavigationList(props) {
         </div>
     )
 };
+
+export default NavigationList;

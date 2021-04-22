@@ -1,8 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+
+// Material UI component
 import Typography from '@material-ui/core/Typography';
 
-function Title(props) {
+const Title = (props) => {
   return (
     <Typography component="h2" variant="h6" color="primary" gutterBottom>
       {props.children}

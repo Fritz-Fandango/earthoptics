@@ -10,7 +10,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 // Material UI Icon
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-export default function ReportsList(props) {
+const ReportsList = (props) => {
   const { classes } = props;
 
   return (
@@ -39,3 +39,5 @@ export default function ReportsList(props) {
     </div>
   )
 };
+
+export default ReportsList;

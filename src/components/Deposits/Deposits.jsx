@@ -11,7 +11,7 @@ function preventDefault(event) {
   event.preventDefault();
 }
 
-export default function Deposits() {
+const Deposits = () => {
   return (
     <React.Fragment>
       <Title>Recent Soil Deposits</Title>
@@ -29,3 +29,5 @@ export default function Deposits() {
     </React.Fragment>
   );
 }
+
+export default Deposits;
