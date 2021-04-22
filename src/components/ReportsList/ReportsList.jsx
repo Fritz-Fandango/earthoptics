@@ -14,7 +14,7 @@ export default function ReportsList(props) {
   const { classes } = props;
 
   return (
-    <div className={classes.root}>
+    <div className={`${classes.root} ${classes.secColor}`}>
       <List>
         <ListSubheader inset>Saved reports</ListSubheader>
         <ListItem button>

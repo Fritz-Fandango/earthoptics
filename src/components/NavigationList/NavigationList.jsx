@@ -17,37 +17,37 @@ export default function NavigationList(props) {
     const { classes } = props;
 
     return (
-        <div className={classes.root}>
+        <div className={`${classes.root} ${classes.primColor}`}>
             <List>
                 <ListItem button>
                     <ListItemIcon>
-                        <DashboardIcon />
+                        <DashboardIcon color="primary" />
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" />
                 </ListItem>
                 <ListItem button>
                     <ListItemIcon>
-                        <ShoppingCartIcon />
+                        <ShoppingCartIcon color="primary" />
                     </ListItemIcon>
                     <ListItemText primary="Tilling" />
                 </ListItem>
                 <ListItem button>
                     <ListItemIcon>
-                        <MapIcon />
+                        <MapIcon color="primary" />
                     </ListItemIcon>
                     <ListItemText primary="Compaction" />
                 </ListItem>
                 <ListItem button>
                     <ListItemIcon>
-                        <BarChartIcon />
+                        <BarChartIcon color="primary" />
                     </ListItemIcon>
                     <ListItemText primary="Reports" />
                 </ListItem>
                 <ListItem button>
                     <ListItemIcon>
-                        <LayersIcon  />
+                        <LayersIcon color="primary" />
                     </ListItemIcon>
-                    <ListItemText primary="Soil Health Insights" />
+                    <ListItemText primary="Soil Health Insights" color="primary" />
                 </ListItem>
             </List>
         </div>
