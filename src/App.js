@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+// Material UI theme functions
+import {
+  createMuiTheme,
+  ThemeProvider
+} from '@material-ui/core/styles';
+
+// Material UI colors
+import green from '@material-ui/core/colors/green';
+import brown from '@material-ui/core/colors/brown';
+
+// Dashboard component
+import Dashboard from './Dashboard';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: green[500],
+    },
+    secondary: {
+      main: brown[500],
+    },
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Dashboard />
+      </div>
+    </ThemeProvider>
   );
 }
 
