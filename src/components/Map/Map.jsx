@@ -53,6 +53,8 @@ const Map = (props) => {
             // Note: Be sure to add your local env var for the token.
             mapboxApiAccessToken={process.env.REACT_APP_SATELLITE_DATA_TOKEN}
             {...viewport}
+            minZoom='10'
+            maxZoom='16'
             mapStyle='mapbox://styles/mapbox/satellite-v9'
             onViewportChange={viewport => { setViewport(viewport) }}
         >
