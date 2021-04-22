@@ -12,18 +12,20 @@ function preventDefault(event) {
 }
 
 const Deposits = () => {
+  let [month, date, year] = new Date().toLocaleDateString("en-US").split("/")
+
   return (
     <React.Fragment>
-      <Title>Recent Soil Deposits</Title>
+      <Title>Recent Soil Deposits Expenditures</Title>
       <Typography component="p" variant="h4">
         $3,024.00
       </Typography>
       <Typography color="secondary" sx={{ flex: 1 }}>
-        on 15 March, 2019
+        {`on ${month}/${date}/${year}.`}
       </Typography>
       <div>
         <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
+          View other data
         </Link>
       </div>
     </React.Fragment>

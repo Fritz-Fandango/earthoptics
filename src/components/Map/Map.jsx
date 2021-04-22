@@ -60,7 +60,7 @@ const Map = (props) => {
             mapboxApiAccessToken={process.env.REACT_APP_SATELLITE_DATA_TOKEN}
             {...viewport}
             {...styleSettings}
-            mapStyle='mapbox://styles/mapbox/satellite-v9'
+            mapStyle='mapbox://styles/mapbox/satellite-v9' // Satellite
             onViewportChange={viewport => { setViewport(viewport) }}
         >
             <div className={classes.mapNavStyle}>

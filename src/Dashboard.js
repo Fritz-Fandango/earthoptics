@@ -17,11 +17,11 @@ import Paper from '@material-ui/core/Paper';
 // import useStyles from './styles/useStyles';
 import Chart from './components/Chart/Chart';
 import FooterDashboard from './components/FooterDashboard/FooterDashboard';
-import Deposits from './components/Deposits/Deposits';
+import DataKPI from './components/DataKPI/DataKPI';
 import Header from './components/Header/Header';
 import LeftNav from './components/LeftNav/LeftNav';
 import Map from './components/Map/Map';
-import Orders from './components/Orders/Orders';
+import DataTable from './components/DataTable/DataTable';
 
 const drawerWidth = 240;
 
@@ -170,13 +170,13 @@ const Dashboard = () => {
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
-                <Deposits />
+                <DataKPI />
               </Paper>
             </Grid>
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <DataTable />
               </Paper>
             </Grid>
           </Grid>
