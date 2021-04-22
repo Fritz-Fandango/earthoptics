@@ -119,6 +119,12 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: purple[700],
     },
+  },
+  mapNavStyle: {
+    position: 'absolute',
+    top: 220,
+    right: 0,
+    padding: '20px'
   }
 }));
 

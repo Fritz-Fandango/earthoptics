@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import ReactMapGL, {
     Marker,
+    NavigationControl,
     Popup
 } from 'react-map-gl';
 
@@ -18,6 +19,11 @@ import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
 
 const Map = (props) => {
     const { classes } = props;
+
+    const styleSettings = {
+        minZoom: 10,
+        maxZoom: 16,
+    };
 
     // Set viewport state
     const [viewport, setViewport] = useState({
@@ -53,11 +59,13 @@ const Map = (props) => {
             // Note: Be sure to add your local env var for the token.
             mapboxApiAccessToken={process.env.REACT_APP_SATELLITE_DATA_TOKEN}
             {...viewport}
-            minZoom='10'
-            maxZoom='16'
+            {...styleSettings}
             mapStyle='mapbox://styles/mapbox/satellite-v9'
             onViewportChange={viewport => { setViewport(viewport) }}
         >
+            <div className={classes.mapNavStyle}>
+                <NavigationControl />
+            </div>
             {multipoint.coordinates.map((coord) => (
                 <Marker
                     key={markerUniqId('coord-')}
