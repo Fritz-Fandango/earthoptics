@@ -8,8 +8,8 @@ import {
     Label,
     ResponsiveContainer
 } from 'recharts';
-
-import Title from '../Title/Title';
+// import Title from './Title';
+import Title from '../Map/Title';
 
 // Generate Sales Data
 function createData(time, amount) {

@@ -1,10 +1,14 @@
 import * as React from 'react';
+
+// Material UI components
 import Link from '@material-ui/core/Link';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+// Components
 import Title from '../Title/Title';
 
 // Generate Order Data
