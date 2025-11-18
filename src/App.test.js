@@ -1,13 +1,26 @@
-import {
-  render,
-  screen
-} from '@testing-library/react';
+import { render, screen } from "@testing-library/react";
+import App from "./App";
 
-import App from './App';
+describe("App Component", () => {
+  test("renders without crashing", () => {
+    render(<App />);
+  });
 
-// TODO: Add tests for components when time permits
-// test('renders dashboard title', () => {
-//   render(<App />);
-//   const linkElement = screen.getByText(/Dashboard/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
+  test("renders dashboard title in header", () => {
+    render(<App />);
+    const dashboardTitle = screen.getByText(/EarthOptics Dashboard/i);
+    expect(dashboardTitle).toBeInTheDocument();
+  });
+
+  test("applies theme provider", () => {
+    const { container } = render(<App />);
+    expect(container.firstChild).toBeInTheDocument();
+  });
+
+  test("renders main Dashboard component", () => {
+    render(<App />);
+    // Dashboard contains specific components
+    const mapElement = screen.getByLabelText(/data point/i);
+    expect(mapElement).toBeInTheDocument();
+  });
+});
