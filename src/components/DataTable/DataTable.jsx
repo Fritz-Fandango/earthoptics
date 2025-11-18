@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from "react";
-
-// Mock data layer
-import uniqid from "uniqid";
-
-// Material UI components
 import Link from "@material-ui/core/Link";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
-// Components
+import React, { useEffect, useState } from "react";
+import uniqid from "uniqid";
 import Title from "../Title/Title";
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
+function DataTable() {
   // Data layer didn't include unique identifiers
   // Use uniqid package imported at top
   const markerUniqId = uniqid;
@@ -63,6 +58,6 @@ function preventDefault(event) {
       </Link>
     </React.Fragment>
   );
-};
+}
 
 export default DataTable;

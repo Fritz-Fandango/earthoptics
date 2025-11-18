@@ -1,17 +1,9 @@
+import IconButton from "@material-ui/core/IconButton";
+import RoomTwoToneIcon from "@material-ui/icons/RoomTwoTone";
 import { useEffect, useState } from "react";
 import ReactMapGL, { Marker, NavigationControl, Popup } from "react-map-gl";
-
-// Mock data layer
-import * as multipoint from "../../data/mockGeo.json";
-
-// Material UI component
-import IconButton from "@material-ui/core/IconButton";
-
-// Material UI icon
-import RoomTwoToneIcon from "@material-ui/icons/RoomTwoTone";
-
-// Install: npm install uuid
 import { v4 as uuidv4 } from "uuid";
+import * as multipoint from "../../data/mockGeo.json";
 
 const id = uuidv4(); // Cryptographically secure
 
