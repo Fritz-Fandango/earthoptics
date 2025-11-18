@@ -1,104 +1,114 @@
-import React, {
-    useEffect,
-    useState
-} from 'react';
-import ReactMapGL, {
-    Marker,
-    NavigationControl,
-    Popup
-} from 'react-map-gl';
+import { useEffect, useState } from "react";
+import ReactMapGL, { Marker, NavigationControl, Popup } from "react-map-gl";
 
 // Mock data layer
-import * as multipoint from '../../data/mockGeo.json';
+import * as multipoint from "../../data/mockGeo.json";
 
 // Material UI component
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from "@material-ui/core/IconButton";
 
 // Material UI icon
-import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
+import RoomTwoToneIcon from "@material-ui/icons/RoomTwoTone";
+
+// Install: npm install uuid
+import { v4 as uuidv4 } from "uuid";
+
+const id = uuidv4(); // Cryptographically secure
 
 const Map = (props) => {
-    const { classes } = props;
+  const { classes } = props;
 
-    const styleSettings = {
-        minZoom: 10,
-        maxZoom: 16,
+  const styleSettings = {
+    minZoom: 10,
+    maxZoom: 16,
+  };
+
+  // Set viewport state
+  const [viewport, setViewport] = useState({
+    latitude: 42.704868874031554,
+    longitude: -92.65880554936408,
+    height: "100vh",
+    width: "67vw",
+    zoom: 13,
+  });
+
+  // Set point selection state
+  const [selectedPoint, setSelectedPoint] = useState(null);
+
+  // Data layer didn't include unique identifiers
+  let markerUniqId = require("uniqid");
+
+  useEffect(() => {
+    const keyboardListener = (evt) => {
+      if (evt.key === "Escape") {
+        setSelectedPoint(null);
+      }
     };
 
-    // Set viewport state
-    const [viewport, setViewport] = useState({
-        latitude: 42.704868874031554,
-        longitude: -92.65880554936408,
-        height: '100vh',
-        width: '67vw',
-        zoom: 13
-    });
+    window.addEventListener("keydown", keyboardListener);
 
-    // Set point selection state
-    const [selectedPoint, setSelectedPoint] = useState(null);
+    return () => {
+      window.removeEventListener("keydown", keyboardListener);
+    };
+  }, []);
 
-    // Data layer didn't include unique identifiers
-    let markerUniqId = require('uniqid')
+  const validateCoordinates = (point) => {
+    if (!Array.isArray(point) || point.length !== 2) return null;
+    const [lat, lon] = point;
+    if (typeof lat !== "number" || typeof lon !== "number") return null;
+    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) return null;
+    return point;
+  };
 
-    useEffect(() => {
-        const keyboardListener = (evt) => {
-            if(evt.key === "Escape") {
-                setSelectedPoint(null);
-            }
-        };
+  const handleMarkerClick = (coord) => {
+    const validated = validateCoordinates(coord);
+    if (validated) setSelectedPoint(validated);
+  };
 
-        window.addEventListener('keydown', keyboardListener);
-
-        return () => {
-            window.removeEventListener('keydown', keyboardListener);
-        };
-    }, []);
-
-    return (
-        <ReactMapGL
-            // Note: Be sure to add your local env var for the token.
-            mapboxApiAccessToken={process.env.REACT_APP_SATELLITE_DATA_TOKEN}
-            {...viewport}
-            {...styleSettings}
-            mapStyle='mapbox://styles/mapbox/satellite-v9' // Satellite
-            onViewportChange={viewport => { setViewport(viewport) }}
+  return (
+    <ReactMapGL
+      // Note: Be sure to add your local env var for the token.
+      mapboxApiAccessToken={process.env.REACT_APP_SATELLITE_DATA_TOKEN}
+      {...viewport}
+      {...styleSettings}
+      mapStyle="mapbox://styles/mapbox/satellite-v9" // Satellite
+      onViewportChange={(viewport) => {
+        setViewport(viewport);
+      }}
+    >
+      <div className={classes.mapNavStyle}>
+        <NavigationControl />
+      </div>
+      {multipoint.coordinates.map((coord) => (
+        <Marker
+          key={markerUniqId("coord-")}
+          latitude={coord[0]}
+          longitude={coord[1]}
         >
-            <div className={classes.mapNavStyle}>
-                <NavigationControl />
-            </div>
-            {multipoint.coordinates.map((coord) => (
-                <Marker
-                    key={markerUniqId('coord-')}
-                    latitude={coord[0]}
-                    longitude={coord[1]}
-                >
-                <IconButton
-                    aria-label="data point"
-                    className={classes.purpleNurple}
-                    size="small"
-                    onClick={evt => {
-                        evt.preventDefault();
-                        setSelectedPoint(coord);
-                    }}
-                >
-                    <RoomTwoToneIcon />
-                </IconButton>
-                </Marker>
-            ))}
-            {selectedPoint ? (
-                <Popup
-                    latitude={selectedPoint[0]}
-                    longitude={selectedPoint[1]}
-                    onClose={() => setSelectedPoint(null)}
-                >
-                    <div>
-                        <pre>{`lat: ${selectedPoint[0]}`}</pre>
-                        <pre>{`log: ${selectedPoint[1]}`}</pre>
-                    </div>
-                </Popup>
-            ) : null }
-        </ReactMapGL>
-    )
-}
+          <IconButton
+            aria-label="data point"
+            className={classes.purpleNurple}
+            size="small"
+            onClick={handleMarkerClick}
+          >
+            <RoomTwoToneIcon />
+          </IconButton>
+        </Marker>
+      ))}
+      {selectedPoint ? (
+        <Popup
+          latitude={selectedPoint[0]}
+          longitude={selectedPoint[1]}
+          onClose={() => setSelectedPoint(null)}
+        >
+          <div>
+            <pre>{`lat: ${selectedPoint[0]}`}</pre>
+            <pre>{`log: ${selectedPoint[1]}`}</pre>
+          </div>
+        </Popup>
+      ) : null}
+    </ReactMapGL>
+  );
+};
 
 export default Map;
