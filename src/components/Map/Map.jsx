@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ReactMapGL, { Marker, NavigationControl, Popup } from "react-map-gl";
 import { v4 as uuidv4 } from "uuid";
 import * as multipoint from "../../data/mockGeo.json";
+import { validateCoordinatePair } from "../../utils/validation";
 
 const id = uuidv4(); // Cryptographically secure
 
@@ -46,10 +47,7 @@ const Map = (props) => {
 
   const validateCoordinates = (point) => {
     if (!Array.isArray(point) || point.length !== 2) return null;
-    const [lat, lon] = point;
-    if (typeof lat !== "number" || typeof lon !== "number") return null;
-    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) return null;
-    return point;
+    return validateCoordinatePair(point) ? point : null;
   };
 
   const handleMarkerClick = (coord) => {
